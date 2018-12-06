@@ -59,7 +59,7 @@ $(OBJDIR):
 
 .PHONY: run
 run:
-	./$(EXEC) $(INSTANCIA) $(ITERACIONES) $(POBLACION) $(PRINT) $(PCRUZ) $(PMUT)
+	./$(EXEC) $(INSTANCIA)
 
 .PHONY: install
 install:

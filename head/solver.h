@@ -15,9 +15,9 @@ public:
     int autos;
     int opciones;
     int clases;
-    int maxauto;
-    int maxtam;
-    int autoclase;
+    std::vector<int> maxauto;
+    std::vector<int> maxtam;
+    std::vector<int> autoclase;
 
     Solver();
     int Read(std::string problema);

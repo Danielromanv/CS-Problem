@@ -4,18 +4,20 @@
 
 #include "solver.h"
 
-using namespace std;
 
 int main(int args, char **argv)
 {
-  string input = argv[1];
-  std::cout<<input<<std::endl;
-  if(args != 1)
-  {
+    std::cout << "vas a morir moe" << std::endl;
+    if(args != 2)
+    {
     std::cout << "Se ha ingresado una cantidad incorrecta de parámetros" << std::endl;
     return 1;
-  }
-  Solver solved = Solver();
-  solved.Read(input);
-  return 0;
+    }
+    std::cout << "Honorarios y ganancias mil" << std::endl;
+    std::string input = argv[1];
+    std::cout<<input<<std::endl;
+    Solver solved = Solver();
+    solved.Read(input);
+    std::cout << "vas a morir moe" << std::endl;
+    return 0;
 }
