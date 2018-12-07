@@ -15,6 +15,7 @@ Solver::Solver()
 int Solver::Read(std::string problema)
 {
     int word;
+    std::vector<int> v;
     this->ruta = problema;
     std::ifstream archivo;
     archivo.open(problema);
@@ -41,6 +42,16 @@ int Solver::Read(std::string problema)
     std::cout<<std::endl;
     for (unsigned int i=0; i<this->maxauto.size();i++)
         std::cout<< this->maxtam[i] <<' ';
+
+    for (int i=0; i<this->clases;i++)
+    {
+        this->autoclase.push_back(v);
+        for(int j=0;j<(this->opciones)+2;i++)
+        {
+            archivo >> word;
+            this->autoclase[i].push_back(word);
+        }
+    }
     std::cout<< std::endl;
     std::cout << autos<<opciones<<clases<< '\n';
     return 0;

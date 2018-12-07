@@ -17,7 +17,7 @@ public:
     int clases;
     std::vector<int> maxauto;
     std::vector<int> maxtam;
-    std::vector<int> autoclase;
+    std::vector<std::vector<int> > autoclase;
 
     Solver();
     int Read(std::string problema);
