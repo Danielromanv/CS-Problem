@@ -19,5 +19,6 @@ int main(int args, char **argv)
     Solver solved = Solver();
     solved.Read(input);
     std::cout << "vas a morir moe" << std::endl;
+    solved.Solve();
     return 0;
 }
