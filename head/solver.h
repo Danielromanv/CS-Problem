@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <stack>
 
 #include "solver.h"
 
@@ -21,8 +22,8 @@ public:
     Solver();
     int Read(std::string problema);
     int Solve();
-    std::vector<int> BT(std::vector<int>& c,std::vector<int>& act, int inicio /*int best*/);
-
+    std::vector<int> BT(std::vector<int>& c,std::vector<int>& act/*int best*/);
+    int eval(std::vector<int> &v);
 
 };
 #endif
