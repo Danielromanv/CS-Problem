@@ -25,7 +25,7 @@ public:
     Solver();
     int Read(std::string problema);
     int Solve();
-    std::vector<int> BT(std::vector<int>& c,std::vector<int>& act,int best,int inicio);
+    std::vector<int> BT(std::vector<int>& c,std::vector<int>& act,std::vector<int>& bestres,int best,int index,int start);
     int eval(std::vector<int> &v);
 
 };

@@ -70,7 +70,8 @@ int Solver::Read(std::string problema)
         std::cout<<std::endl;
     }
     for(int i=0;i<this->clases;i++){
-        this->dominio.push_back(autoclase[i][1]);
+        for (int j=0;j<autoclase[i][1];j++)
+            this->dominio.push_back(autoclase[i][0]);
     }
     return 0;
 }
@@ -78,69 +79,37 @@ int Solver::Read(std::string problema)
 int Solver::Solve()
 {
     std::vector<int> sol, v;
-    sol = BT(this->dominio,v, 2147483647,0);
+    for(int i = 0; i<autos;i++)
+        v.push_back(0);
+    sol = BT(this->dominio,v,sol, 2147483647,0,0);
     for(unsigned int i=0;i<sol.size();i++)
         std::cout<<sol[i];
     std::cout<< "esta es la sol "<<std::endl;
+    std::cout<< eval(sol)<<std::endl;
     return 0;
 }
 
-std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& act,int best,int inicio){
-    std::cout<<"best = "<<best<<std::endl;
-    std::cout<<"inicio = "<<inicio<<std::endl;
-    int e;
-    bool flag = check(c);
-    std::cout << flag << '\n';
-    std::cout << "c inicial = ";
-    for (unsigned int j = 0 ; j<c.size();j++)
-        std::cout << c[j];
-    std::vector<int> v = act;
-    if(inicio==autos){
-        std::cout << "miiiiau" << '\n';
-        e = eval(v);
-        return(v);}
-        std::cout << "/* message */" << '\n';
-    while(flag){
-            for(int i=inicio;i<clases;){
-                std::cout << "i= "<< i << '\n';
-                std::cout << "c = ";
-                for (unsigned int j = 0 ; j<c.size();j++)
-                    std::cout << c[j];
-                std::cout << '\n';
-                std::cout << "v = ";
-                for (unsigned int j = 0 ; j<v.size();j++)
-                    std::cout << v[j];
-                std::cout << '\n';
-                std::cout <<"best = "<<best<< std::endl;
-                std::cout << "c actual "<< c[i] << "\n\n";
-                if (c[i] > 0){
-                    v.push_back(i);
-                    c[i] = c[i] - 1;
-                    }
-                else if(c[i] == 0){
-                    i++;
-                    }
-
-                }
-            if(!check(c)){
-                std::cout << "\nme qué sin valores\n" << '\n';
-                for (unsigned int j = 0 ; j<c.size();j++)
-                    std::cout << c[j];
-                for (unsigned int j = 0 ; j<v.size();j++)
-                    std::cout << v[j];
-                flag = check(c);
-            }
+std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& act,std::vector<int>& bestres,int best,int index,int start){
+    for (unsigned int i = 0; i < act.size(); i++) {
+        std::cout <<  act[i];
     }
-    e = eval(v);
-    std::cout << "llamo a la recursión" << '\n';
-    return BT(c,v,e,inicio+1);
+    std::cout << '\n';
+    if(int e = eval(act) <= best){
+        bestres = act;
+        best = e;
+    }
+    if(index == this->autos){
+        return bestres;
+    }
+    for (int j = start;j<this->autos;j++){
+        act[index] = c[j];
+        act = BT(c,act,bestres,best,index+1,j+1);
+    }
+    return act;
 }
 
 int Solver::eval(std::vector<int> &v)
-{   for (unsigned int i=0;i<v.size();i++)
-        std::cout<< v[i]<< " ";
-    std::cout<<std::endl;
-    int eval = 0;
+{   int eval = 0;
     int bloque;
     int iter;
 
@@ -156,6 +125,5 @@ int Solver::eval(std::vector<int> &v)
             }
         }
     }
-    std::cout<<"valor = "<<eval<<std::endl;
     return eval;
 }
