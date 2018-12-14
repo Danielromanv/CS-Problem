@@ -30,6 +30,5 @@ public:
     bool checkseq(std::vector<int> v, int n);
     std::vector<int> BT(std::vector<int>& c,std::vector<int>& act,std::vector<int>& bestres,int best,int index,int start);
     int eval(std::vector<int> &v);
-
-};
+    };
 #endif

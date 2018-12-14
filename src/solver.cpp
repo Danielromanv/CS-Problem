@@ -20,7 +20,6 @@ bool check(std::vector<int> v){
 
 Solver::Solver()
 {
-    std::cout << "Ahora existo" << std::endl;
 }
 
 
@@ -87,12 +86,17 @@ int Solver::Solve()
     for(int i = 0; i<autos;i++)
         v.push_back(0);
     sol = BT(this->dominio,v,sol, 2147483647,0,0);
-    for(unsigned int i=0;i<sol.size();i++)
-        std::cout<<sol[i];
-    std::cout<< "esta es la sol "<<std::endl;
+    std::cout << "Solución: " << '\n';
+    for(unsigned int i=0;i<sol.size();i++){
+        std::cout<<sol[i]<<" ";
+        for(int j = 0;j<opciones;j++)
+        std::cout << this->claseop[sol[i]][j] << ' ';
+        std::cout << '\n';
+    }
     std::cout<< eval(sol)<<std::endl;
     return 0;
 }
+//Funcion para evitar que se infrija las restricciones de cantidad de autos de cada clase en la secuencia
 bool Solver::checkseq(std::vector<int> v, int n)
 {   int cont = 0;
     int max = autoclase[n][1];
@@ -106,14 +110,15 @@ bool Solver::checkseq(std::vector<int> v, int n)
         return true;
 }
 std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& act,std::vector<int>& bestres,int best,int index,int start){
-    // std::cout << "actual:" << '\n';
-    // for (unsigned int i = 0; i < act.size(); i++) {
-    //     std::cout<< act[i]<<" ";
-    // }
-    // std::cout<<std::endl;
+    std::cout << "actual:" << '\n';
     for (unsigned int i = 0; i < act.size(); i++) {
-        std::cout << " "<< act[i];
-    }
+         std::cout<< act[i]<<" ";
+     }
+     std::cout<<std::endl;
+    for (unsigned int i = 0; i < bestres.size(); i++) {
+          std::cout<< bestres[i]<<" ";
+      }
+    std::cout<<std::endl;
     std::cout << '\n';
     if(int e = eval(act) <= best){
         bestres = act;
@@ -126,8 +131,8 @@ std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& act,std::vecto
         if(checkseq(act,c[j]))
             act[index] = c[j];
         else
-            break;
-        act = BT(c,act,bestres,best,index+1,j+1);
+            continue;
+        act = BT(c,act,bestres,best,index+1,++j);
     }
     return act;
 }

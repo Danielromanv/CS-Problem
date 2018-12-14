@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
+#include <iterator>
 #include "solver.h"
 
 
@@ -18,7 +18,6 @@ int main(int args, char **argv)
     Solver solved = Solver();
     solved.Read(input);
     solved.Solve();
-
 
     return 0;
 }
