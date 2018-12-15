@@ -7,17 +7,21 @@
 
 int main(int args, char **argv)
 {
-    std::cout << "vas a morir moe" << std::endl;
     if(args != 2)
     {
     std::cout << "Se ha ingresado una cantidad incorrecta de parámetros" << std::endl;
     return 1;
     }
     std::string input = argv[1];
-    std::cout<<input<<std::endl;
+    std::string s = input;
+    std::string delimiter = "/";
+    std::string token = s.substr(s.find(delimiter)+1,s.size());
+    delimiter=".txt";
+    token = token.substr(0,token.find(delimiter));
+    token = token + ".out";
     Solver solved = Solver();
     solved.Read(input);
-    solved.Solve();
+    solved.Solve(token);
 
     return 0;
 }

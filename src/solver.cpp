@@ -34,7 +34,6 @@ int Solver::Read(std::string problema)
     std::cout << "No se pudo leer el archivo" << std::endl;
     return 1;
     }
-    std::cout << "En cada urna griega está" << '\n';
     archivo >> this-> autos;
     archivo >> this-> opciones;
     archivo >> this-> clases;
@@ -80,71 +79,51 @@ int Solver::Read(std::string problema)
     return 0;
 }
 
-int Solver::Solve()
-{
+void Solver::Solve(std::string token){
     std::vector<int> sol, v;
-    for(int i = 0; i<autos;i++)
-        v.push_back(0);
+    std::ofstream salida;
+    v.resize(autos);
     sol = BT(this->dominio,v,sol, 2147483647,0,0);
+    salida.open(token);
     std::cout << "Solución: " << '\n';
     for(unsigned int i=0;i<sol.size();i++){
         std::cout<<sol[i]<<" ";
-        for(int j = 0;j<opciones;j++)
-        std::cout << this->claseop[sol[i]][j] << ' ';
+        salida<<sol[i]<<" ";
+        for(int j = 0;j<opciones;j++){
+            std::cout << this->claseop[sol[i]][j] << ' ';
+            salida<< this->claseop[sol[i]][j] << ' ';
+        }
+        salida<<'\n';
         std::cout << '\n';
     }
-    std::cout<< eval(sol)<<std::endl;
-    return 0;
+    salida<<"restricciones instatisfechas = " <<eval(sol)<<std::endl;
+    std::cout<< "restricciones instatisfechas = " <<eval(sol)<<std::endl;
+    salida.close();
 }
+
 //Funcion para evitar que se infrija las restricciones de cantidad de autos de cada clase en la secuencia
-bool Solver::checkseq(std::vector<int> v, int n)
-{   int cont = 0;
-    int max = autoclase[n][1];
-    for (unsigned int i = 0; i < v.size(); i++) {
-        if(v[i] == n)
-            cont++;
-    }
-    if (cont==max)
-        return false;
-    else
-        return true;
-}
+
 std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& act,std::vector<int>& bestres,int best,int index,int start){
-    std::cout << "actual:" << '\n';
-    for (unsigned int i = 0; i < act.size(); i++) {
-         std::cout<< act[i]<<" ";
-     }
-     std::cout<<std::endl;
-    for (unsigned int i = 0; i < bestres.size(); i++) {
-          std::cout<< bestres[i]<<" ";
-      }
-    std::cout<<std::endl;
-    std::cout << '\n';
-    if(int e = eval(act) <= best){
-        bestres = act;
-        best = e;
-    }
-    if(index == this->autos){
-        return bestres;
-    }
-    for (int j = start;j<this->autos;j++){
-        if(checkseq(act,c[j]))
-            act[index] = c[j];
-        else
-            continue;
-        act = BT(c,act,bestres,best,index+1,++j);
-    }
-    return act;
+	std::sort(c.begin(), c.end());
+    int e;
+	do {
+        if((e=eval(c)) < best){
+            best = e;
+            bestres = c;
+        }
+	}while(std::next_permutation(c.begin(), c.end()));
+    return(bestres);
 }
+
 int Solver::eval(std::vector<int> &v){
     int restr = 0;
     unsigned int sizeIndividuo = v.size();
-    for (unsigned int opcion = 0; opcion < blocksize.size(); opcion++){                           //Recorre opciones
+    for (unsigned int opcion = 0; opcion < blocksize.size(); opcion++){
       int block = blocksize[opcion];
       int maxCars = this->maxopt[opcion];
-      for (unsigned int i = 0; i < sizeIndividuo; i++){                            //recorre individuo
+      for (unsigned int i = 0; i < sizeIndividuo; i++){
         int optionsInBlock = 0;
-        for(unsigned int s = i; s < std::min(sizeIndividuo,i + block); s++){            //recorre bloque dentro del individuo
+        for(unsigned int s = i; s < std::min(sizeIndividuo,i + block); s++){
           optionsInBlock += this->claseop[v[s]][opcion];
         }
         if(optionsInBlock > maxCars) restr++;
