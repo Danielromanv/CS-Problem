@@ -80,10 +80,17 @@ int Solver::Read(std::string problema)
 }
 
 void Solver::Solve(std::string token){
-    std::vector<int> sol, v;
+    std::vector<int> sol, k;
     std::ofstream salida;
-    v.resize(autos);
-    sol = BT(this->dominio,v,sol, 2147483647,0,0);
+    for(unsigned int i=0; i<this->dominio.size();i++)
+        std::cout << this->dominio[i] << ' ';
+    std::cout << '\n';
+    int pos = 2147483647;
+    k = BT(this->dominio,sol, pos,0,(int)this->dominio.size());
+    for (size_t n = 0; n < k.size(); n++) {
+        std::cout << k[n] << '\n';
+    }
+    std::cout << '\n';
     salida.open(token);
     std::cout << "Solución: " << '\n';
     for(unsigned int i=0;i<sol.size();i++){
@@ -102,17 +109,68 @@ void Solver::Solve(std::string token){
 }
 
 //Funcion para evitar que se infrija las restricciones de cantidad de autos de cada clase en la secuencia
-
-std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& act,std::vector<int>& bestres,int best,int index,int start){
+/*std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& bestres,int best,int index,int end){
 	std::sort(c.begin(), c.end());
     int e;
+
 	do {
-        if((e=eval(c)) < best){
+        for (unsigned int j = 0; j < c.size(); j++) {
+            std::cout << c[j] << ' ';
+        }
+        std::cout << '\n';
+	    if((e=eval(c)) < best){
             best = e;
             bestres = c;
         }
 	}while(std::next_permutation(c.begin(), c.end()));
     return(bestres);
+}*/
+
+void swap(int a,std::vector<int> &arr,int b)
+{
+	int temp = arr[b];
+	arr[b] = arr[a];
+	arr[a] = temp;
+}
+
+std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& bestres,int &best,int index,int end){
+    int t;
+    if (index == end){
+
+        /*std::cout << "End" << '\n';
+        for (int x = 0; x < this->autos; x++) {
+            std::cout << c[x] << ' ';
+        }*/
+    }
+    else{
+        for (int i = index; i < end; i++) {
+            t = eval(c);
+            if (t<best) {
+                /*std::cout << "entró con: ";
+                std::cout << c.size() << '\n';
+                std::cout << t << '\n';
+                std::cout << '\n';*/
+                bestres = c;
+                best = t;
+            }
+            if(c[i] == c[index])
+                continue;
+            std::cout << " t= "<< t<<" best= "<<best << "\n\n\n\n";
+            for (int m = 0; m < 10; m++) {
+                std::cout << c[m] << ' ';
+            }
+            std::cout << '\n';
+            std::cout << " t= "<< t<<" best= "<<best << "\n\n\n\n";
+            /*std::cout << "t es: "<<t << '\n';
+            std::cout << "best es: "<<best << '\n';*/
+            //std::cout << "iteración "<< i << '\n';
+            swap(index,c,i);
+            BT(c,bestres,best,index+1,end);
+            swap(i,c,index);
+        }
+
+    }
+    return bestres;
 }
 
 int Solver::eval(std::vector<int> &v){
