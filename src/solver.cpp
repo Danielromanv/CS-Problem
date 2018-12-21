@@ -46,11 +46,11 @@ int Solver::Read(std::string problema)
         archivo >> word;
         this->blocksize.push_back(word);
     }
-    for (unsigned int i=0; i<this->maxopt.size();i++)
-        std::cout<< this->maxopt[i] <<' ';
-    std::cout<<std::endl;
-    for (unsigned int i=0; i<this->maxopt.size();i++)
-        std::cout<< this->blocksize[i] <<' ';
+    // for (unsigned int i=0; i<this->maxopt.size();i++)
+    //     std::cout<< this->maxopt[i] <<' ';
+    // std::cout<<std::endl;
+    // for (unsigned int i=0; i<this->maxopt.size();i++)
+    //     std::cout<< this->blocksize[i] <<' ';
     //Se guardan los autos de cada clase con sus opciones en una matriz
     for (int i=0; i<this->clases;i++)
     {
@@ -64,13 +64,13 @@ int Solver::Read(std::string problema)
                 this->claseop[i].push_back(word);
         }
     }
-    std::cout<<std::endl;
-    for (int i=0; i<this->clases;i++)
-    {
-        for(j=0;j<(this->opciones)+2;j++)
-            std::cout<<this->autoclase[i][j]<< " ";
-        std::cout<<std::endl;
-    }
+    // std::cout<<std::endl;
+    // for (int i=0; i<this->clases;i++)
+    // {
+    //     for(j=0;j<(this->opciones)+2;j++)
+    //         std::cout<<this->autoclase[i][j]<< " ";
+    //     std::cout<<std::endl;
+    // }
 
     for(int i=0;i<this->clases;i++){
         for (int j=0;j<autoclase[i][1];j++)
@@ -82,29 +82,30 @@ int Solver::Read(std::string problema)
 void Solver::Solve(std::string token){
     std::vector<int> sol, k;
     std::ofstream salida;
-    for(unsigned int i=0; i<this->dominio.size();i++)
-        std::cout << this->dominio[i] << ' ';
-    std::cout << '\n';
+    //for(unsigned int i=0; i<this->dominio.size();i++)
+    //    std::cout << this->dominio[i] << ' ';
+    //std::cout << '\n';
     int pos = 2147483647;
-    k = BT(this->dominio,sol, pos,0,(int)this->dominio.size());
-    for (size_t n = 0; n < k.size(); n++) {
-        std::cout << k[n] << '\n';
-    }
-    std::cout << '\n';
+    int limit;
+    k = BT(this->dominio,sol, pos,0,(int)this->dominio.size(), limit);
+    //for (size_t n = 0; n < k.size(); n++) {
+    //    std::cout << k[n] << '\n';
+    //}
+    //std::cout << '\n';
     salida.open(token);
-    std::cout << "Solución: " << '\n';
+    //std::cout << "Solución: " << '\n';
     for(unsigned int i=0;i<sol.size();i++){
-        std::cout<<sol[i]<<" ";
+        //std::cout<<sol[i]<<" ";
         salida<<sol[i]<<" ";
         for(int j = 0;j<opciones;j++){
-            std::cout << this->claseop[sol[i]][j] << ' ';
+            //std::cout << this->claseop[sol[i]][j] << ' ';
             salida<< this->claseop[sol[i]][j] << ' ';
         }
         salida<<'\n';
-        std::cout << '\n';
+        //std::cout << '\n';
     }
     salida<<"restricciones instatisfechas = " <<eval(sol)<<std::endl;
-    std::cout<< "restricciones instatisfechas = " <<eval(sol)<<std::endl;
+    //std::cout<< "restricciones instatisfechas = " <<eval(sol)<<std::endl;
     salida.close();
 }
 
@@ -133,7 +134,7 @@ void swap(int a,std::vector<int> &arr,int b)
 	arr[a] = temp;
 }
 
-std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& bestres,int &best,int index,int end){
+std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& bestres,int &best,int index,int end, int &limit){
     int t;
     if (index == end){
 
@@ -144,6 +145,7 @@ std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& bestres,int &b
     }
     else{
         for (int i = index; i < end; i++) {
+            limit = limit+1;
             t = eval(c);
             if (t<best) {
                 /*std::cout << "entró con: ";
@@ -153,19 +155,22 @@ std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& bestres,int &b
                 bestres = c;
                 best = t;
             }
+            //else if(t > best){
+            //    continue;
+            //}
             if(c[i] == c[index])
                 continue;
-            std::cout << " t= "<< t<<" best= "<<best << "\n\n\n\n";
-            for (int m = 0; m < 10; m++) {
-                std::cout << c[m] << ' ';
-            }
-            std::cout << '\n';
-            std::cout << " t= "<< t<<" best= "<<best << "\n\n\n\n";
+            // std::cout << " t= "<< t<<" best= "<<best << "\n\n\n\n";
+            // for (int m = 0; m < 10; m++) {
+            //     std::cout << c[m] << ' ';
+            // }
+            //std::cout << '\n';
+            //std::cout << " t= "<< t<<" best= "<<best << "\n\n\n\n";
             /*std::cout << "t es: "<<t << '\n';
             std::cout << "best es: "<<best << '\n';*/
             //std::cout << "iteración "<< i << '\n';
             swap(index,c,i);
-            BT(c,bestres,best,index+1,end);
+            BT(c,bestres,best,index+1,end,limit);
             swap(i,c,index);
         }
 

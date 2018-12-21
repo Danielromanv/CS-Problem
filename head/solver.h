@@ -27,7 +27,7 @@ public:
     Solver();
     int Read(std::string problema);
     void Solve(std::string token);
-    std::vector<int> BT(std::vector<int>& c,std::vector<int>& bestres,int &best,int index,int end);
+    std::vector<int> BT(std::vector<int>& c,std::vector<int>& bestres,int &best,int index,int end, int &limit);
     //void BT2(std::vector<int>& c,std::vector<int>& bestres,int best,int index,int end);
     int eval(std::vector<int> &v);
     };
