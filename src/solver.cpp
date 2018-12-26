@@ -86,7 +86,7 @@ void Solver::Solve(std::string token){
     //    std::cout << this->dominio[i] << ' ';
     //std::cout << '\n';
     int pos = 2147483647;
-    int limit;
+    int limit = 2147483647;
     k = BT(this->dominio,sol, pos,0,(int)this->dominio.size(), limit);
     //for (size_t n = 0; n < k.size(); n++) {
     //    std::cout << k[n] << '\n';
@@ -137,7 +137,7 @@ void swap(int a,std::vector<int> &arr,int b)
 std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& bestres,int &best,int index,int end, int &limit){
     int t;
     if (index == end){
-
+        return bestres;
         /*std::cout << "End" << '\n';
         for (int x = 0; x < this->autos; x++) {
             std::cout << c[x] << ' ';
@@ -145,8 +145,13 @@ std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& bestres,int &b
     }
     else{
         for (int i = index; i < end; i++) {
-            limit = limit+1;
+            if(best == 0)
+                return bestres;
             t = eval(c);
+            //for (size_t l = 0; l < c.size(); l++) {
+            //    std::cout << c[l] << " ";
+            //}
+            //std::cout << "eval = "<< t << '\n';
             if (t<best) {
                 /*std::cout << "entró con: ";
                 std::cout << c.size() << '\n';
@@ -155,11 +160,18 @@ std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& bestres,int &b
                 bestres = c;
                 best = t;
             }
-            //else if(t > best){
-            //    continue;
-            //}
-            if(c[i] == c[index])
+            //std::cout << "t= "<< t<<" limit= "<<limit << '\n';
+            if (t > limit){
+                //std::cout << "continue" << '\n';
                 continue;
+            }
+            // else if(t > best){
+            //     std::cout << "break" << '\n';
+            //     BT(c,bestres,best,index+1,end,limit);
+            //     return bestres;
+            // }
+            if(c[i] == c[index])
+               continue;
             // std::cout << " t= "<< t<<" best= "<<best << "\n\n\n\n";
             // for (int m = 0; m < 10; m++) {
             //     std::cout << c[m] << ' ';
@@ -170,7 +182,7 @@ std::vector<int> Solver::BT(std::vector<int>& c,std::vector<int>& bestres,int &b
             std::cout << "best es: "<<best << '\n';*/
             //std::cout << "iteración "<< i << '\n';
             swap(index,c,i);
-            BT(c,bestres,best,index+1,end,limit);
+            BT(c,bestres,best,index+1,end,t);
             swap(i,c,index);
         }
 

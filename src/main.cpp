@@ -22,6 +22,14 @@ int main(int args, char **argv)
     Solver solved = Solver();
     solved.Read(input);
     solved.Solve(token);
-
+    //std::vector<int> v;
+    //v.push_back(1);
+    //v.push_back(1);
+    //v.push_back(0);
+    //v.push_back(0);
+    //v.push_back(2);
+    //v.push_back(3);
+    //v.push_back(3);
+    //std::cout << solved.eval(v);
     return 0;
 }
